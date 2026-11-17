@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gratien Xavier-Maximin-Anne — Portfolio</title>
+<style>
+:root{color-scheme:dark;--bg:#07051a;--fg:#f3f0ff;--mute:#b4aee0;--card:rgba(14,10,40,.55);--line:rgba(255,255,255,.18);--c1:#8fd3ff;--c2:#ff8fd8;--c3:#ffd479;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh;overflow-x:hidden}
+#bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block}
+main{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:28px 14px 40px;display:flex;flex-direction:column;gap:14px}
+header{padding:0 4px}
+header h1{margin:0;font-size:clamp(1.7rem,6.6vw,2.8rem);font-weight:700;letter-spacing:-.02em;line-height:1.08}
+header p{margin:8px 0 0;color:var(--mute);font-size:.92rem;line-height:1.5}
+.grad{background:linear-gradient(90deg,var(--c1),var(--c2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;padding:0 4px;font-size:.75rem;color:var(--mute)}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+svg{width:100%;height:auto;display:block;overflow:visible;touch-action:manipulation}
+.edge{stroke:rgba(255,255,255,.14);stroke-width:1;transition:stroke .4s,stroke-width .4s,stroke-opacity .4s}
+.edge.on{stroke:#fff;stroke-opacity:.9;stroke-width:2}
+.orbit{fill:none;stroke:rgba(255,255,255,.1);stroke-dasharray:2 7}
+.node{cursor:pointer;outline:none}
+.node .core{transition:r .3s}
+.node .ring{fill:none;stroke-opacity:.6;animation:pulse 2.8s ease-out infinite;transform-box:fill-box;transform-origin:center}
+.node .hit{fill:transparent}
+.node text{fill:var(--fg);font-size:11.5px;font-weight:600;pointer-events:none;paint-order:stroke;stroke:rgba(7,5,26,.85);stroke-width:3px}
+.node.on text{font-size:13px}
+.node.on .ring{animation-duration:1.4s}
+.hubtxt{fill:var(--mute);font-size:12px;text-anchor:middle;paint-order:stroke;stroke:rgba(7,5,26,.85);stroke-width:3px}
+@keyframes pulse{0%{transform:scale(.6);opacity:.9}100%{transform:scale(2.4);opacity:0}}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:22px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding:20px;min-height:190px}
+.panel.in{animation:in .45s ease}
+@keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.panel h2{margin:0 0 4px;font-size:1.35rem}
+.kicker{font-size:.75rem;letter-spacing:.12em;text-transform:uppercase}
+.panel p{color:#ddd8ff;line-height:1.55;margin:10px 0;font-size:.95rem}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
+.tags span{font-size:.75rem;padding:4px 10px;border-radius:99px;border:1px solid var(--line);color:var(--mute)}
+.btn{display:inline-block;margin-top:4px;padding:10px 16px;border-radius:12px;background:linear-gradient(90deg,var(--c1),var(--c2));color:#120a30;font-weight:700;text-decoration:none;font-size:.9rem}
+.hint{color:var(--mute);text-align:center;font-size:.9rem;margin:0}
+.skills{background:var(--card);border:1px solid var(--line);border-radius:22px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding:20px}
+.skills h3{margin:0 0 4px;font-size:1.15rem}
+.skills h4{margin:16px 0 0;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--c1);font-weight:600}
+.skills .tags{margin:8px 0 0}
+.skills .tags a{font-size:.75rem;padding:4px 10px;border-radius:99px;border:1px solid var(--c2);color:var(--fg);text-decoration:none}
+footer{color:var(--mute);font-size:.75rem;text-align:center}
+@media (prefers-reduced-motion:reduce){.node .ring{animation:none}.panel.in{animation:none}}
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+<main>
+  <header>
+    <h1><span class="grad">Gratien</span> Xavier-Maximin-Anne</h1>
+    <p>Originaire de Martinique, à Ducos · Élève-ingénieur en 5ᵉ année à Polytech Angers (Systèmes automatisés &amp; génie informatique)<br>À la recherche d’un stage de fin d’études de 6 mois, à Montpellier.</p>
+  </header>
+  <div class="legend">
+    <span><i style="background:var(--c1)"></i>Projets perso</span>
+    <span><i style="background:var(--c2)"></i>Projets académiques</span>
+    <span><i style="background:var(--c3)"></i>Expérience pro</span>
+  </div>
+  <svg id="g" viewBox="0 0 460 460" role="group" aria-label="Graphe des projets"></svg>
+  <section class="panel" id="panel" aria-live="polite">
+    <p class="hint">↑ Touche un point du graphe pour découvrir un projet.</p>
+  </section>
+  <section class="skills">
+    <h3>Compétences techniques</h3>
+    <h4>Automatisme &amp; embarqué</h4><div class="tags"><span>Siemens (Grafcet, Ladder)</span><span>Sémaphores</span><span>Supervision</span><span>Objets connectés</span></div>
+    <h4>Réseaux &amp; systèmes</h4><div class="tags"><span>Administration réseau</span><span>GNU/Linux</span><span>Bases de données</span></div>
+    <h4>Cybersécurité</h4><div class="tags"><span>Sensibilisation SSI</span><span>OSINT</span></div>
+    <h4>Données &amp; IA</h4><div class="tags"><span>Fusion capteurs caméra/accéléromètre</span><span>Computer vision</span><span>Machine learning</span></div>
+    <h4>Développement</h4><div class="tags"><span>Java</span><span>C</span><span>C#</span><span>SQL</span><span>Web front/back-end</span></div>
+    <h4>DevOps &amp; Cloud</h4><div class="tags"><span>Terraform</span><span>Ansible</span><span>Docker</span><span>Harbor</span></div>
+    <h4>VR / RA</h4><div class="tags"><span>Unity 6</span><span>Meta SDK All-in-One</span><span>Android SDK</span><span>OpenXR</span></div>
+    <h4>Modélisation 3D</h4><div class="tags"><span>SolidWorks</span><span>Blender</span></div>
+    <h4>Langues</h4><div class="tags"><span>Français — langue maternelle</span><span>Anglais — B2 (TOEIC, Cambridge)</span><span>Espagnol — A2</span><span>Japonais — autodidacte (3 ans)</span></div>
+    <h4>Soft skills &amp; divers</h4><div class="tags"><span>Permis B</span><span>PSC1</span><span>Piano</span><span>Échecs</span><span>Dessin numérique</span><a href="https://www.instagram.com/melonpan_hoshii/" target="_blank" rel="noopener">Mes dessins sur Instagram →</a></div>
+  </section>
+  <footer>© 2026 Gratien Xavier-Maximin-Anne</footer>
+</main>
+
+<script>
+const C1="#8fd3ff",C2="#ff8fd8",C3="#ffd479";
+const P=[
+ {t:"Galérapagos",g:0,k:"Projet perso · Web app",d:"Extension numérique du jeu de société Galérapagos : une web app qui enrichit les parties.",tags:["Web app","JavaScript","Jeu de société"],url:"https://gratien972.github.io/Galerpagos/",cta:"Ouvrir l’app"},
+ {t:"The Pit Trader",g:0,k:"Projet perso · Python · Minecraft",d:"Détecteur d’acheteurs et de vendeurs d’items dans The Pit (Hypixel). Un programme Python lit logs.txt, classe vendeur ou acheteur par mots-clés et envoie un message personnalisé (« [pseudo] vend ou achète [objet] à ce prix ») sur Discord et WhatsApp.",tags:["Python","Parsing de logs","Discord","WhatsApp"]},
+ {t:"Distance Debugger",g:0,k:"Projet perso · Python · Discord",d:"Un programme Python lit un salon Discord via webhook, extrait l’expéditeur et le contenu du message, puis passe ce contenu dans une invite de commande du PC : des commandes PowerShell envoyées à distance depuis Discord.",tags:["Python","Webhook","PowerShell","Remote"],url:"https://github.com/Nox97224/DS_RM",cta:"Voir le dépôt"},
+ {t:"Télécommande",g:0,k:"Projet perso · PWA iPhone",d:"Interface web en raccourci iPhone qui simule une app iOS : clavier virtuel qui tape la lettre choisie sur le PC et trackpad qui pilote le curseur par envoi de vecteurs. Connectée à un bot Discord, avec diffusion d’écran en temps réel (Flask, MJPEG).",tags:["PWA","Flask","MJPEG","Bot Discord"]},
+ {t:"Ngrok Capture",g:0,k:"Projet perso · Tunnel",d:"Canal Ngrok auquel j’ai ajouté une capture d’écran envoyée sur un lien HTTP contrôlé par un token d’authentification.",tags:["Ngrok","HTTP","Token auth"]},
+ {t:"BlastOps",g:0,k:"Projet perso · Web app",d:"Web app pour batailles de gel blaster, avec une map personnalisée.",tags:["Web app","Map custom","Gel blaster"],url:"https://blastops.tiiny.site",cta:"Ouvrir l’app"},
+ {t:"Stage Japon",g:2,k:"Expérience pro · 2026 · VR/RM",d:"Stage de développement d’applications VR/RM : conception d’un jeu éducatif en réalité virtuelle sur les procédés de développement des plantes, et d’une application de réalité mixte pour une salle d’entraînement à l’application de suppositoires.",tags:["Unity 6","Meta SDK All-In-One","Android SDK","OpenXR"]},
+ {t:"Automate Siemens",g:1,k:"Projet académique · Automatisme",d:"Conception et programmation d’un circuit d’automate Siemens intégrant une gestion de sémaphores pour la synchronisation des processus.",tags:["Siemens","Grafcet","Ladder","Sémaphores"]},
+ {t:"AR mécanique",g:1,k:"Projet académique · Réalité augmentée",d:"Import de fichiers CAO dans Unity et système de manipulation des pièces (agrandissement, réduction, sockets) pour la reconstruction assistée d’objets mécaniques.",tags:["Unity","CAO","AR"]},
+ {t:"Tracking capteurs",g:1,k:"Projet académique · Fusion de capteurs",d:"Superposition de données caméra et accéléromètre par calculs d’optique pour le suivi de position.",tags:["Caméra","Accéléromètre","Optique"]},
+ {t:"IA couverts",g:1,k:"Projet académique · Intelligence artificielle",d:"Développement d’un modèle de reconnaissance d’images pour l’identification automatique de couverts.",tags:["Computer vision","Machine learning"]},
+ {t:"DevOps",g:1,k:"Projet académique · Infrastructure",d:"Infrastructure DevOps automatisée : déploiement de VM avec Terraform, installation de modules Docker via playbooks Ansible, gestion des images de conteneurs avec Harbor.",tags:["Terraform","Ansible","Docker","Harbor"]},
+ {t:"API IoT",g:1,k:"Projet académique · IoT",d:"API REST communiquant via Bluetooth avec un Arduino (LED, capteur de température) relié à un Raspberry Pi, lui-même connecté à deux PC par un serveur local.",tags:["REST","Arduino","Raspberry Pi","Bluetooth"]}
+];
+const COL=[C1,C2,C3],NS="http://www.w3.org/2000/svg",svg=document.getElementById("g"),panel=document.getElementById("panel");
+const cx=230,cy=230;
+function el(n,a,p){const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);(p||svg).appendChild(e);return e}
+// anneaux : intérieur = perso (6), extérieur = académique + pro (6)
+const inner=P.filter(p=>p.g===0),outer=P.filter(p=>p.g!==0);
+const RI=88,RO=170;
+el("circle",{class:"orbit",cx,cy,r:RI});el("circle",{class:"orbit",cx,cy,r:RO});
+inner.forEach((p,i)=>{p.R=RI;p.a0=-Math.PI/2+i*2*Math.PI/inner.length;p.sp=.07});
+outer.forEach((p,i)=>{p.R=RO;p.a0=-Math.PI/2+Math.PI/outer.length+i*2*Math.PI/outer.length;p.sp=-.04});
+const eg=el("g",{});
+P.forEach(p=>{p.e=el("line",{class:"edge",x1:cx,y1:cy,x2:cx,y2:cy},eg);p.ph=Math.random()*6.28});
+const hub=el("g",{});
+const hc=el("circle",{cx,cy,r:9,fill:"#fff"},hub);
+const hr=el("circle",{cx,cy,r:20,fill:"none",stroke:"#fff","stroke-opacity":.35},hub);
+el("text",{class:"hubtxt",x:cx,y:cy+40},hub).textContent="Projets";
+// particules sur l'arête sélectionnée
+const parts=[0,1,2].map(()=>el("circle",{r:2.6,fill:"#fff",opacity:0}));
+let sel=-1,mx=null,my=null;
+P.forEach((p,i)=>{
+  const col=COL[p.g];
+  p.n=el("g",{class:"node",tabindex:0,role:"button","aria-label":p.t});
+  el("circle",{class:"ring",r:11,stroke:col,cx:0,cy:0},p.n);
+  p.c=el("circle",{class:"core",r:9,fill:col,cx:0,cy:0},p.n);
+  el("circle",{class:"hit",r:24,cx:0,cy:0},p.n);
+  p.tx=el("text",{x:0,y:0},p.n);p.tx.textContent=p.t;
+  p.n.addEventListener("click",()=>show(i));
+  p.n.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();show(i)}});
+});
+svg.addEventListener("pointermove",e=>{const r=svg.getBoundingClientRect();mx=(e.clientX-r.left)/r.width*460;my=(e.clientY-r.top)/r.height*460});
+svg.addEventListener("pointerleave",()=>{mx=null});
+function show(i){
+  sel=i;const p=P[i],col=COL[p.g];
+  P.forEach((q,j)=>{q.n.classList.toggle("on",j===i);q.e.classList.toggle("on",j===i);q.e.style.stroke=j===i?col:""});
+  panel.innerHTML="";
+  const k=document.createElement("div");k.className="kicker";k.style.color=col;k.textContent=p.k;
+  const h=document.createElement("h2");h.textContent=p.t;
+  const d=document.createElement("p");d.textContent=p.d;
+  const tg=document.createElement("div");tg.className="tags";
+  p.tags.forEach(t=>{const s=document.createElement("span");s.textContent=t;tg.appendChild(s)});
+  panel.append(k,h,d,tg);
+  if(p.url){const a=document.createElement("a");a.className="btn";a.href=p.url;a.target="_blank";a.rel="noopener";a.textContent=p.cta+" →";panel.appendChild(a)}
+  panel.classList.remove("in");void panel.offsetWidth;panel.classList.add("in");
+  if(window.innerWidth<700)panel.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+const still=matchMedia("(prefers-reduced-motion:reduce)").matches;
+function frame(ms){
+  const t=ms/1000;
+  const s=1+.06*Math.sin(t*2);hc.setAttribute("r",9*s);hr.setAttribute("r",20+4*Math.sin(t*1.3));
+  P.forEach((p,i)=>{
+    const a=p.a0+t*p.sp;
+    let r=p.R+7*Math.sin(t*.9+p.ph);
+    let x=cx+r*Math.cos(a)+4*Math.sin(t*1.3+p.ph),y=cy+r*Math.sin(a)+4*Math.cos(t*1.1+p.ph);
+    if(mx!==null){const dx=x-mx,dy=y-my,d=Math.hypot(dx,dy);if(d<70){const f=(70-d)/70*14;x+=dx/d*f;y+=dy/d*f}}
+    p.x=x;p.y=y;
+    p.n.setAttribute("transform",`translate(${x.toFixed(1)} ${y.toFixed(1)})`);
+    p.e.setAttribute("x2",x);p.e.setAttribute("y2",y);
+    const on=i===sel;
+    p.c.setAttribute("r",on?13+1.5*Math.sin(t*4):9);
+    const right=x>cx+20,left=x<cx-20;
+    const out=p.R>RI?1:0;
+    p.tx.setAttribute("text-anchor",right?"start":left?"end":"middle");
+    p.tx.setAttribute("x",right?14:left?-14:0);
+    p.tx.setAttribute("y",right||left?4:(y>cy?26:-16));
+  });
+  if(sel>=0){const p=P[sel];parts.forEach((q,j)=>{const u=((t*.6+j/3)%1);q.setAttribute("cx",cx+(p.x-cx)*u);q.setAttribute("cy",cy+(p.y-cy)*u);q.setAttribute("fill",COL[p.g]);q.setAttribute("opacity",Math.sin(u*Math.PI))})}
+  if(!still)requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+/* ---- Shader gradient + halo ---- */
+const c=document.getElementById("bg"),gl=c.getContext("webgl");
+if(gl){
+ const vs="attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}";
+ const fs=`precision mediump float;uniform float t;uniform vec2 r;
+ void main(){
+  vec2 uv=(gl_FragCoord.xy*2.-r)/min(r.x,r.y);
+  vec2 p=uv;
+  for(float i=1.;i<4.;i++){p.x+=.6/i*sin(i*2.1*p.y+t*.35+i);p.y+=.6/i*cos(i*2.1*p.x+t*.3+i*1.7);}
+  float f=.5+.5*sin(p.x*1.4+p.y*1.1+t*.2);
+  vec3 a=vec3(.10,.05,.38),b=vec3(.12,.55,.95),d=vec3(.95,.30,.75);
+  vec3 col=mix(a,b,smoothstep(.1,.9,f));
+  col=mix(col,d,smoothstep(.55,1.,.5+.5*sin(p.y*1.7-p.x+t*.15)));
+  float dist=length(uv-vec2(0.,.1));
+  float rad=.62+.06*sin(t*.8);
+  float halo=.035/abs(dist-rad);
+  float halo2=.02/abs(dist-rad*1.55-.04*sin(t*.5));
+  col+=vec3(.7,.85,1.)*halo*.55+vec3(1.,.6,.9)*halo2*.35;
+  col*=1.-.35*smoothstep(.8,2.,length(uv));
+  gl_FragColor=vec4(col,1.);
+ }`;
+ const sh=(ty,s)=>{const o=gl.createShader(ty);gl.shaderSource(o,s);gl.compileShader(o);return o};
+ const pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,vs));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,fs));gl.linkProgram(pr);gl.useProgram(pr);
+ const b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+ const loc=gl.getAttribLocation(pr,"a");gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
+ const ut=gl.getUniformLocation(pr,"t"),ur=gl.getUniformLocation(pr,"r");
+ const rs=()=>{const s=Math.min(devicePixelRatio||1,1.5);c.width=innerWidth*s;c.height=innerHeight*s;gl.viewport(0,0,c.width,c.height)};
+ rs();addEventListener("resize",rs);
+ const loop=ms=>{gl.uniform1f(ut,ms/1000);gl.uniform2f(ur,c.width,c.height);gl.drawArrays(gl.TRIANGLES,0,3);if(!still)requestAnimationFrame(loop)};
+ requestAnimationFrame(loop);
+}else{
+ c.style.background="radial-gradient(circle at 50% 35%,#3a6fff 0,#2a0f6b 45%,#07051a 80%)";
+}
+</script>
+</body>
+</html>
